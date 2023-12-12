@@ -9,7 +9,7 @@ object Problem1 {
     /**
      * Returns the integer parsed and the position after the integer was parsed or -1,-1 if not found
      */
-    fun parseInt(line: String, startIndex: Int): Pair<Int, Int> {
+    fun parseLong(line: String, startIndex: Int): Pair<Long, Int> {
         var startInt = -1
         for (i in startIndex..line.length - 1) {
             if (line[i] in '0'..'9') {
@@ -33,12 +33,12 @@ object Problem1 {
         }
 
         val intString = line.substring(startInt, endInt)
-        return Pair(intString.toInt(), endInt)
+        return Pair(intString.toLong(), endInt)
     }
 
-    fun getNumberOfWins(totalTime: Int, currentRecord: Int): Int {
-        var wins = 0
-        for (i in 1..totalTime - 1) {
+    fun getNumberOfWins(totalTime: Long, currentRecord: Long): Long {
+        var wins = 0L
+        for (i in 1..<totalTime) {
             val distance = getDistance(i, totalTime)
             if (distance > currentRecord) {
                 wins++
@@ -54,8 +54,8 @@ object Problem1 {
      * at the beginning of the race holding down the button, the boat's speed increases by one millimeter per
      * millisecond.
      */
-    fun getDistance(timePressed: Int, totalTime: Int): Int {
-        if (timePressed == 0) {
+    fun getDistance(timePressed: Long, totalTime: Long): Long {
+        if (timePressed == 0L) {
             return 0
         }
         if (timePressed == totalTime) {
@@ -65,7 +65,7 @@ object Problem1 {
         return timePressed * timeRemaining
     }
 
-    fun solve(inputFile: String = "/day6input.txt") {
+    fun solve(inputFile: String = "/day6p2input.txt") {
         val lineReader = {}.javaClass.getResourceAsStream(inputFile)?.bufferedReader() ?: throw RuntimeException("Error opening file")
         val timeLine = lineReader.readLine()
         val distanceLine = lineReader.readLine()
@@ -76,11 +76,11 @@ object Problem1 {
             throw RuntimeException("Expecting the line to start with 'Time:'")
         }
 
-        val times = mutableListOf<Int>()
+        val times = mutableListOf<Long>()
         var position = timePosition + 5
         while (position < timeLine.length) {
-            val parseResult = parseInt(timeLine, position)
-            if (parseResult.first == -1) {
+            val parseResult = parseLong(timeLine, position)
+            if (parseResult.first == -1L) {
                 break
             } else {
                 times.add(parseResult.first)
@@ -92,11 +92,11 @@ object Problem1 {
         if (distancePosition == -1) {
             throw RuntimeException("Expecting the line to start with 'Distance:'")
         }
-        val distances = mutableListOf<Int>()
+        val distances = mutableListOf<Long>()
         position = distancePosition + 9
         while (position < distanceLine.length) {
-            val parseResult = parseInt(distanceLine, position)
-            if (parseResult.first == -1) {
+            val parseResult = parseLong(distanceLine, position)
+            if (parseResult.first == -1L) {
                 break
             } else {
                 distances.add(parseResult.first)
@@ -104,10 +104,11 @@ object Problem1 {
             position = parseResult.second
         }
 
-        val wins = mutableListOf<Int>()
+        val wins = mutableListOf<Long>()
         for (i in 0..< times.size) {
             val time = times[i]
             val distance = distances[i]
+            println("Trying $time $distance")
             wins.add(getNumberOfWins(time, distance))
         }
 
