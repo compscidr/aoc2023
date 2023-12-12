@@ -6,23 +6,6 @@ fun main() {
     Problem1.solve()
 }
 
-data class MapEntry(val destination: Long, val source: Long, val range: Long) {
-    /**
-     * Returns the destination if the map entry supports the source, otherwise
-     * returns -1
-     */
-    fun getDestination(candidate: Long): Long {
-        if (candidate < source) {
-            return -1
-        }
-        if (candidate > source + range) {
-            return -1
-        }
-        val diff = candidate - source
-        return destination + diff
-    }
-}
-
 object Problem1 {
     fun obtainSeeds(lineReader: BufferedReader): List<Long> {
         var line = lineReader.readLine() ?: throw RuntimeException("Unexpected end to file")
